@@ -25,3 +25,11 @@ export type jobItem = {
   }
   score: number;
 }
+
+export interface FeedProps {
+  items: jobItem[];
+  totalJobs: number;
+  pages: number[];
+  currentPage: string | null;
+  updateCurrentPage: (page: string) => void;
+}
