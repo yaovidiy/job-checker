@@ -3,7 +3,8 @@ import { json } from '@sveltejs/kit';
 import puppeteer, { type CookieParam } from 'puppeteer';
 import { type jobItem } from '$lib/types';
 
-export async function GET() {
+export async function GET({ url }) {
+  const pagination = url.searchParams.get('page') ?? 1;
   const cookie_sessionid: CookieParam = {
     name: 'sessionid',
     value: env.SESSION_COOKIES_VALUE ?? '',
@@ -19,7 +20,7 @@ export async function GET() {
   const page = await browser.newPage();
 
   await page.setCookie(cookie_sessionid);
-  await page.goto('https://djinni.co/jobs/?primary_keyword=JavaScript', {
+  await page.goto(`https://djinni.co/jobs/?primary_keyword=JavaScript&page=${pagination}`, {
     waitUntil: 'networkidle2',
   });
   const pageData = await page.evaluate(() => {
@@ -34,24 +35,28 @@ export async function GET() {
       const isSenior = job.generalInfo.title.toLowerCase().includes('senior');
       const isFrontEnd = job.generalInfo.title.toLowerCase().includes('front');
       const isFullStack = job.generalInfo.title.toLowerCase().includes('fullstack');
+      const isReactNative = job.generalInfo.title.toLowerCase().includes('react native')
       const expNumber = job.additionalInfo.experience.match(/\d/);
       const isExperience = parseInt(expNumber ? expNumber[0] : '0') >= 3;
       const isAngular = job.generalInfo.title.toLowerCase().includes('angular');
       const isSalary = job.generalInfo?.pubSalary?.max ? parseInt(job.generalInfo.pubSalary.max) >= 3500 : false;
+      const isSalaryLess = job.generalInfo?.pubSalary?.max ? parseInt(job.generalInfo.pubSalary.max) <= 3000 : false;
 
-      score += isRemote ? 11 : 0;
-      score += isReact ? 5 : 0;
-      score += isVue ? 9 : 0;
+      score += isRemote ? 15 : 0;
+      score += isReact ? 9 : 0;
+      score += isVue ? 10 : 0;
       score += isSvelte ? 12 : 0;
-      score += isMiddle ? 4 : 0;
-      score += isSenior ? 11 : 0;
-      score += isFrontEnd ? 11 : 0;
-      score += isFullStack ? 4 : 0;
-      score += isExperience ? 9 : 0;
-      score += isSalary ? 9 : 0;
+      score += isMiddle ? 10 : 0;
+      score += isSenior ? 14 : 0;
+      score += isFrontEnd ? 15 : 0;
+      score += isFullStack ? 9 : 0;
+      score += isExperience ? 12 : 0;
+      score += isSalary ? 14 : 0;
 
       score = isAngular ? 0 : score;
       score = isOffice ? 0 : score;
+      score = isReactNative ? 0 : score;
+      score = isSalaryLess ? 0 : score;
       return score;
     }
     const totalAmountEl = document.querySelector('header.page-header div h1 .text-muted') as HTMLElement;
@@ -91,6 +96,7 @@ export async function GET() {
       }
       const reviewsReg = reviewsEl?.dataset?.originalTitle?.match(/\d*/);
       const appliesReg = appliesEl?.dataset?.originalTitle?.match(/\d*/);
+      const exp = experienceEl?.innerText.match(/\d/);
       const analitics = {
         reviews: reviewsReg ? reviewsReg[0] : '',
         applies: appliesReg ? appliesReg[0] : '',
@@ -99,7 +105,7 @@ export async function GET() {
       const additionalInfo = {
         location: locationEl?.innerText,
         typeOfJob: typeOfJobEl?.innerText,
-        experience: experienceEl?.innerText,
+        experience: exp ? exp[0] : 'Not found',
         english: englishEl?.innerText,
       }
 

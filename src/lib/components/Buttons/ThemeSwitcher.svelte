@@ -2,7 +2,7 @@
 	let isChecked = $state(true);
 
 	$effect(() => {
-		document.documentElement.dataset.theme = isChecked ? 'night' : 'light';
+		document.documentElement.dataset.theme = isChecked ? 'night' : 'emerald';
 	});
 </script>
 

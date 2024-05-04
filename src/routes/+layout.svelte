@@ -3,7 +3,7 @@
   import "../app.css";
 </script>
 
-<header>
+<header class="p-3 flex justify-end">
   <ThemeSwitcher />
 </header>
 <slot />
