@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { type jobItem } from '$lib/types';
+	import { fade } from 'svelte/transition';
+	import { type CardProps } from '$lib/types';
 
-	const { generalInfo, additionalInfo, analitics, score }: jobItem = $props();
+	const { item, clickOnItem }: CardProps = $props();
+	const { generalInfo, additionalInfo, analitics, score } = item;
 	let showFullText = $state(false);
 	const text = $derived.by(() => {
 		if (showFullText) {
@@ -17,7 +19,7 @@
 	}
 </script>
 
-<div class="card w-full bg-neutral text-neutral-content">
+<div transition:fade class="card w-full bg-neutral text-neutral-content">
 	<div class="card-body gap-5 justify-between">
 		<div class="flex gap-2">
 			<div class="flex w-full md:w-2/3 gap-2 flex-col">
@@ -31,7 +33,7 @@
 			</div>
 			<div class="divider md:flex hidden divider-horizontal"></div>
 			<div class="md:flex hidden sticky top-4 flex-col gap-4 w-1/3 items-center">
-				<h2 class="card-title">Preview Score</h2>
+				<h2 class="card-title">Score</h2>
 				<div
 					class="radial-progress"
 					style={`--value:${score}`}
@@ -75,7 +77,7 @@
 			</div>
 		</div>
 		<div class="card-actions justify-end">
-			<button class="btn btn-primary">Open job details</button>
+			<a href="/" onclick={() => clickOnItem(item)} class="btn btn-primary">Open job details</a>
 			<a href={generalInfo.link} target="_blank" class="btn btn-ghost">Go to Djinni</a>
 		</div>
 	</div>

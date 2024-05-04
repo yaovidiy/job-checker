@@ -1,16 +1,28 @@
 <script lang="ts">
-	import { type jobItem } from '$lib/types/';
+	import { type jobItem, type JobProps } from '$lib/types/';
 	import Feed from '$lib/components/Feed/Feed.svelte';
+	import Job from '$lib/components/Job/Job.svelte';
 
 	const { data } = $props();
 	let items = $state<jobItem[]>([]);
 	let totalJobs = $state(0);
 	let currentPage = $state(data.page);
 	let pages = $state<number[]>([]);
-	const skeletonItems = [1, 2, 3, 4, 5, 6];
+	let jobData = $state<JobProps | null>(null);
 
 	function updateCurrentPage(page: string) {
 		currentPage = page;
+	}
+
+	function showJob(item: jobItem) {
+		jobData = {
+			applied: item.analitics.applies,
+			reviews: item.analitics.reviews,
+			isApplied: item.analitics.isApplied,
+			url: item.generalInfo.link,
+			score: item.score,
+			moveBack: () => (jobData = null)
+		};
 	}
 
 	async function loadFeedPage(page: string | null = null) {
@@ -36,4 +48,8 @@
 	});
 </script>
 
-<Feed {totalJobs} {items} {pages} {currentPage} {updateCurrentPage} />
+{#if !jobData}
+	<Feed {totalJobs} {items} {pages} {currentPage} {updateCurrentPage} clickOnItem={showJob} />
+{:else}
+	<Job {...jobData} />
+{/if}

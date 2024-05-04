@@ -2,7 +2,7 @@
   import { type FeedProps } from "$lib/types";
   import Card from "./Card.svelte";
 
-  const { totalJobs, items, pages, currentPage, updateCurrentPage }: FeedProps = $props();
+  const { totalJobs, items, pages, currentPage, updateCurrentPage, clickOnItem }: FeedProps = $props();
   const skeletonItems = [1, 2, 3, 4, 5, 6];
 </script>
 
@@ -21,7 +21,7 @@
 		{/each}
 	{:else}
 		{#each items as item}
-			<Card {...item} />
+			<Card {item} {clickOnItem} />
 		{/each}
 		<div class="join mx-auto md:col-span-2 lg:col-span-3">
 			{#each pages as page}

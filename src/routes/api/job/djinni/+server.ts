@@ -58,16 +58,28 @@ export async function POST({ request }) {
   const compareButton = await page.waitForSelector('text/Порівняти мій профіль ');
   await compareButton?.click();
 
-  const expLevelEl = await page.waitForSelector('text/за досвідом');
-  const expLevel = await page.evaluate(el => {
-    return (el as HTMLElement).innerText;
-  }, expLevelEl);
-  const salaryLevelEl = await page.waitForSelector('text/зарплату, ніж ви.');
-  const salaryLevel = await page.evaluate(el => {
-    return (el as HTMLElement).innerText;
-  }, salaryLevelEl)
+  let salaryLevel = '';
+  let expLevel = '';
+
+  try {
+    const expLevelEl = await page.waitForSelector('text/за досвід');
+    expLevel = await page.evaluate(el => {
+      return (el as HTMLElement).innerText;
+    }, expLevelEl);
+    const salaryLevelEl = await page.waitForSelector('text/зарплату, ніж ви.');
+    salaryLevel = await page.evaluate(el => {
+      return (el as HTMLElement).innerText;
+    }, salaryLevelEl)
+  } catch (err) {
+    console.log(err);
+    await page.screenshot({
+      path: './static/error.png',
+      fullPage: true,
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let dialogData: any = {};
+  let dialogData: any = null;
   try {
     const dialogButtonEl = await page.waitForSelector('text/Відкрити діалог', { timeout: 2000 });
     const dialogLink = await page.evaluate(el => {
