@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
 import puppeteer, { type CookieParam } from 'puppeteer';
 import { type jobItem } from '$lib/types';
@@ -5,7 +6,7 @@ import { type jobItem } from '$lib/types';
 export async function GET() {
   const cookie_sessionid: CookieParam = {
     name: 'sessionid',
-    value: '.eJyVUl1P2zAU_StTHngZaex8OHEktCFAKysDWtENoUmWYzupIYkj20GqEP99dmgFfUHaQ25O7sdxfM95CZgae6u3QRmsnzSVvQiO9znCFBe-sFi5JO1VH5QvgeQuJWoucIoAYjROGROYZTxjCOAKg7rAE4kW1ArfHIM4CUEexvkdhGWalkk2KzKMcfYVgBIA11y3tDGO_fXVYa06N2VoS7UUxlUbZYkeW4fLmrZGHAdGNv04EKOYpC2ho924iVb2T4LL3k3sYah8LSbGun9xLT_y84WcP5zVeLyIu8tbnp6eXd8MgP-W1RV8vHOjB5wvQUXZk-j5B_od53srp5b61p52_oy_I0jj2scU-JiICcMJV1N8y8df_AuKt48ppj5maMLY70VqY8l_E_sN0MPBT48ZJLOjFmTUrWvfWDuYMoo6d1s6ayXj_YypLuKdiWRHGxGdpecgOV3O5-0FQQsxkvtlNGhVy1aEXJqhpdtho6wKzUa7rZECAP9EIIIZgrjASRJDUHwTJxDhzHkhBuDo-aQSlh7Zk3yhYwbnq9WvYVg93t4_2yz8OSdrZDdAcnn95_I2XMCHNVguA2-YSSsyGqHJZE6IMcRpcFB4l3EnGlNazHZZM9trO7vagZvTncYfODbUeJtlFCCKamf4HCMkqlzETORpUmOIipwKVBR5XYgYFEXBEGZJ4W6TM6cdpnnN4aHHyCRUqxrZk8-8NozO-MSMlWFaVl7VLVXPXG6_Nx2VrRdoIh4180XbkErZ4PUfZ5Y74A:1s2y4p:Rq02i9-ZV4laP6MIhFuzUzHbxvdFDWD_Y38L34vM2so',
+    value: env.SESSION_COOKIES_VALUE ?? '',
     domain: '.djinni.co',
     path: '/',
     expires: new Date('2025-05-03T17:38:44.000Z').getTime(),
