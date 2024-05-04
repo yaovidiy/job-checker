@@ -75,7 +75,7 @@
 			</div>
 		</div>
 		<div class="card-actions justify-end">
-			<button class="btn btn-primary">Open job card</button>
+			<button class="btn btn-primary">Open job details</button>
 			<a href={generalInfo.link} target="_blank" class="btn btn-ghost">Go to Djinni</a>
 		</div>
 	</div>
