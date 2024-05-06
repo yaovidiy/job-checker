@@ -27,7 +27,7 @@ export async function POST({ request }) {
     await page.goto(`${body.url}/reviews/`);
     await page.waitForSelector('text/404', { timeout: 1000 });
 
-    return json({ pageData: null });
+    return json(null);
   } catch (err) {
     const reviewsData = await page.evaluate(() => {
       const lastComment = document.querySelector('#commentsList .b-comment') as HTMLElement;

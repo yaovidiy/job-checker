@@ -1,6 +1,7 @@
 import puppeteer, { type CookieParam } from 'puppeteer';
 import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
+import { type vacancyData, type dialogPageData } from '$lib/types/index.js';
 
 export async function POST({ request }) {
   const body = await request.json();
@@ -24,7 +25,7 @@ export async function POST({ request }) {
     waitUntil: 'networkidle2',
   });
 
-  const vacancyData = await page.evaluate(() => {
+  const vacancyData: vacancyData = await page.evaluate(() => {
     const aside = document.querySelector('aside') as HTMLElement;
     const asideLists = aside.querySelectorAll('ul');
 
@@ -71,15 +72,13 @@ export async function POST({ request }) {
       return (el as HTMLElement).innerText;
     }, salaryLevelEl)
   } catch (err) {
-    console.log(err);
     await page.screenshot({
-      path: './static/error.png',
+      path: './static/djinni/error.png',
       fullPage: true,
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let dialogData: any = null;
+  let dialogData: dialogPageData = null;
   try {
     const dialogButtonEl = await page.waitForSelector('text/Відкрити діалог', { timeout: 2000 });
     const dialogLink = await page.evaluate(el => {
@@ -90,7 +89,7 @@ export async function POST({ request }) {
       waitUntil: 'networkidle2',
     });
 
-    const dialogPageData = await page.evaluate(() => {
+    const dialogPageData: dialogPageData = await page.evaluate(() => {
       const messageList = document.querySelector('.thread-messages-list');
       const messages = messageList?.querySelectorAll('div.thread-message');
       const lastMessage = messages ? messages[messages?.length - 1] : null;
@@ -112,13 +111,12 @@ export async function POST({ request }) {
       return { lastMessageDate, readMessageData, isYouLastWroote };
     });
 
-    console.log(dialogPageData);
     dialogData = dialogPageData;
+
+    return json({ vacancyData, expLevel, salaryLevel, dialogData });
   } catch (err) {
-    console.log(err);
+    return json(null);
+  } finally {
+    await browser.close();
   }
-
-  await browser.close();
-
-  return json({ vacancyData, expLevel, salaryLevel, dialogData });
 }

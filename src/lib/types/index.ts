@@ -1,5 +1,3 @@
-import type { Snippet } from "svelte";
-
 export type jobItem = {
   generalInfo: {
     title: string;
@@ -28,6 +26,22 @@ export type jobItem = {
   score: number;
 }
 
+export type vacancyData = {
+  canApply: boolean;
+  mainTag: string;
+  tags: string[];
+  domain: string;
+  jobLocType: string;
+  jobType: string;
+  location: string;
+} | null
+
+export type dialogPageData = {
+  lastMessageDate: string;
+  readMessageData: string;
+  isYouLastWroote: boolean;
+} | null
+
 export interface FeedProps {
   items: jobItem[];
   totalJobs: number;
@@ -50,15 +64,4 @@ export interface JobProps {
   score: number;
   url: string;
   moveBack: () => void;
-}
-
-export interface StatProps {
-  title: string;
-  value: string;
-  desc: string;
-}
-export interface StatsProps {
-  items: StatProps[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  statSnippet?: Snippet<[any]>;
 }

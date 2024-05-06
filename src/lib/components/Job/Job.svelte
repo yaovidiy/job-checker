@@ -1,13 +1,9 @@
 <script lang="ts">
-	import { type JobProps, type StatProps, type StatsProps } from '$lib/types';
-	import Stats from './Stats.svelte';
+	import { type JobProps } from '$lib/types';
 	import { onMount } from 'svelte';
 
 	const { applied, reviews, isApplied, url, score, moveBack }: JobProps = $props();
-	let salaryExp = $state<StatsProps | null>(null);
-	let tags = $state<StatsProps | null>(null);
-	let locations = $state<StatsProps | null>(null);
-	let messages = $state<StatsProps | null>(null);
+	const djinniData = $state(null)
 
 	async function loadJobData() {
 		const fetchResp = await fetch('/api/job/djinni', {
