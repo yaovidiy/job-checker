@@ -21,7 +21,7 @@
 
 <div transition:fade class="card w-full bg-neutral text-neutral-content">
 	<div class="card-body gap-5 justify-between">
-		<div class="flex gap-2">
+		<div class="flex md:flex-row flex-col gap-2">
 			<div class="flex w-full md:w-2/3 gap-2 flex-col">
 				<h2 class="card-title">{generalInfo.title}</h2>
 				<p>
@@ -32,7 +32,7 @@
 				</p>
 			</div>
 			<div class="divider md:flex hidden divider-horizontal"></div>
-			<div class="md:flex hidden sticky top-4 flex-col gap-4 w-1/3 items-center">
+			<div class="flex sticky top-4 flex-col gap-4 w-full md:w-1/3 items-center">
 				<h2 class="card-title">Score</h2>
 				<div
 					class="radial-progress"
@@ -50,15 +50,15 @@
 						</h3>
 					</li>
 					<li>
-						<h3 class="truncate w-full">
+						<h3 class="truncate w-full text-base">
 							Applied:
 							<span class:text-success={analitics.isApplied} class:text-error={!analitics.isApplied}
 								>{analitics.isApplied ? 'Yes' : 'No'}</span
 							>
 						</h3>
 					</li>
-					<li>
-						<h3 class="truncate w-full tooltip" data-tip={generalInfo.companyName}>
+					<li class="h-6">
+						<h3 class="truncate text-left w-full text-base tooltip" data-tip={generalInfo.companyName}>
 							Company:
 							<a
 								href={`https://jobs.dou.ua/companies/${generalInfo.companyName.toLowerCase()}/reviews/`}
@@ -69,7 +69,7 @@
 						</h3>
 					</li>
 					<li>
-						<h3 class="truncate w-full">
+						<h3 class="truncate w-full text-base">
 							Exp: {additionalInfo.experience}
 						</h3>
 					</li>

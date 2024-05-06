@@ -23,15 +23,17 @@
 		{#each items as item}
 			<Card {item} {clickOnItem} />
 		{/each}
-		<div class="join mx-auto md:col-span-2 lg:col-span-3">
-			{#each pages as page}
-				<a
-					href={`/?page=${page}`}
-					onclick={() => updateCurrentPage(page.toString())}
-					class="join-item btn"
-					class:btn-primary={currentPage ? parseInt(currentPage) === page : page === 1}>{page}</a
-				>
-			{/each}
+		<div class="flex justify-center w-[90vw]">
+			<div class="join max-w-full overflow-x-auto mx-auto md:col-span-2 lg:col-span-3">
+				{#each pages as page}
+					<a
+						href={`/?page=${page}`}
+						onclick={() => updateCurrentPage(page.toString())}
+						class="join-item btn"
+						class:btn-primary={currentPage ? parseInt(currentPage) === page : page === 1}>{page}</a
+					>
+				{/each}
+			</div>
 		</div>
 	{/if}
 </div>

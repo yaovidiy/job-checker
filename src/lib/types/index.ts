@@ -43,6 +43,7 @@ export interface CardProps {
 }
 
 export interface JobProps {
+  companyName: string;
   applied: string;
   reviews: string;
   isApplied: boolean;

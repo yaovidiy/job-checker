@@ -21,6 +21,7 @@
 			isApplied: item.analitics.isApplied,
 			url: item.generalInfo.link,
 			score: item.score,
+			companyName: item.generalInfo.companyName,
 			moveBack: () => (jobData = null)
 		};
 	}
