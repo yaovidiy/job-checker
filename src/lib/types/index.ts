@@ -26,6 +26,50 @@ export type jobItem = {
   score: number;
 }
 
+export type reviewsData = {
+  lastComment: lastComment;
+  totalComments: number;
+}
+
+export type commentAuthor = {
+  name: string;
+  link: string;
+}
+
+export type lastComment = {
+  author: commentAuthor;
+  comment: string;
+  time: string;
+}
+
+export type vacanciesDataItem = {
+  date: string;
+  title: string;
+  link: string;
+  location: string;
+  shortDesc: string;
+}
+
+export type vacanciesdData = {
+  vacancies: {
+    totalVacancies: number;
+    vacanciesDataList: vacanciesDataItem[];
+  };
+  companyScore: string;
+}
+
+export type djinniResponse = {
+  vacancyData: vacancyData;
+  expLevel: string;
+  salaryLevel: string;
+  dialogData: dialogPageData;
+} | null;
+
+export type douResponse = {
+  reviewsData: reviewsData | null;
+  vacanciesdData: vacanciesdData | null;
+} | null
+
 export type vacancyData = {
   canApply: boolean;
   mainTag: string;

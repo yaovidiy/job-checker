@@ -55,19 +55,19 @@ export async function POST({ request }) {
       location: locationEl?.innerText ?? '',
     }
   });
-
-  const compareButton = await page.waitForSelector('text/Порівняти мій профіль ');
-  await compareButton?.click();
-
   let salaryLevel = '';
   let expLevel = '';
 
   try {
-    const expLevelEl = await page.waitForSelector('text/за досвід');
+    const compareButton = await page.waitForSelector('text/Порівняти мій профіль ', { timeout: 1000 });
+    await compareButton?.click();
+
+
+    const expLevelEl = await page.waitForSelector('text/за досвід', { timeout: 1000 });
     expLevel = await page.evaluate(el => {
       return (el as HTMLElement).innerText;
     }, expLevelEl);
-    const salaryLevelEl = await page.waitForSelector('text/зарплату, ніж ви.');
+    const salaryLevelEl = await page.waitForSelector('text/зарплату, ніж ви.', { timeout: 1000 });
     salaryLevel = await page.evaluate(el => {
       return (el as HTMLElement).innerText;
     }, salaryLevelEl)
@@ -80,7 +80,7 @@ export async function POST({ request }) {
 
   let dialogData: dialogPageData = null;
   try {
-    const dialogButtonEl = await page.waitForSelector('text/Відкрити діалог', { timeout: 2000 });
+    const dialogButtonEl = await page.waitForSelector('text/Відкрити діалог', { timeout: 1000 });
     const dialogLink = await page.evaluate(el => {
       return (el as HTMLAnchorElement).href;
     }, dialogButtonEl);
@@ -115,7 +115,7 @@ export async function POST({ request }) {
 
     return json({ vacancyData, expLevel, salaryLevel, dialogData });
   } catch (err) {
-    return json(null);
+    return json({ vacancyData, expLevel, salaryLevel, dialogData });
   } finally {
     await browser.close();
   }
