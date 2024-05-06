@@ -1,14 +1,32 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	let isChecked = $state(true);
 
-	$effect(() => {
-		document.documentElement.dataset.theme = isChecked ? 'night' : 'emerald';
-	});
+	function changeTheme() {
+		const theme = isChecked ? 'night' : 'emerald';
+		
+		localStorage.setItem('theme', theme);
+
+		document.documentElement.dataset.theme = theme;
+	}
+
+	onMount(() => {
+		const getTheme = localStorage.getItem('theme');
+
+		if (getTheme === null) {
+			return;
+		}
+
+		const isDarkTheme = getTheme === 'night';
+
+		isChecked = isDarkTheme;
+		changeTheme();
+	})
 </script>
 
 <label class="swap swap-rotate">
 	<!-- this hidden checkbox controls the state -->
-	<input type="checkbox" class="theme-controller" bind:checked={isChecked} />
+	<input type="checkbox" class="theme-controller" bind:checked={isChecked} onchange={changeTheme} />
 
 	<!-- sun icon -->
 	<svg
