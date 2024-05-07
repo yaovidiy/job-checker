@@ -3,7 +3,9 @@
   import "../app.css";
 </script>
 
-<header class="p-3 flex justify-end">
+<header class="px-5 py-3 flex justify-end">
   <ThemeSwitcher />
 </header>
-<slot />
+<main class="px-5 py-10">
+  <slot />
+</main>

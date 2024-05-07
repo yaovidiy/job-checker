@@ -49,7 +49,7 @@ export async function POST({ request }) {
       canApply: isRequrementsNotMetEl === null,
       mainTag: mainTagEl?.innerText ?? '',
       tags: tagsEl?.innerText.split(',') ?? [],
-      domain: domainEl?.innerText ?? '',
+      domain: domainEl?.innerText?.split(':')[1].trim() ?? '',
       jobLocType: jobLocTypeEl?.innerText ?? '',
       jobType: jobTypeEl?.innerText ?? '',
       location: locationEl?.innerText ?? '',

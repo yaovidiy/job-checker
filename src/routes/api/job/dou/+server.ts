@@ -102,7 +102,7 @@ export async function POST({ request }) {
             totalVacancies: +totalVacancieEl?.innerText?.split(' ')[0],
             vacanciesDataList
           },
-          companyScore: compantScoreWidgetEl?.innerText?.split(':')[1].trim() ?? 'No score El',
+          companyScore: compantScoreWidgetEl?.innerText?.split(':')[1].split('/')[0].trim() ?? 'No score El',
         }
       });
 

@@ -107,5 +107,8 @@ export interface JobProps {
   isApplied: boolean;
   score: number;
   url: string;
+  title: string;
+  shortDesc: string;
+  description: string;
   moveBack: () => void;
 }

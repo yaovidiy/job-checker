@@ -6,7 +6,7 @@
   const skeletonItems = [1, 2, 3, 4, 5, 6];
 </script>
 
-<h1 class="text-center text-5xl">
+<h1 class="text-center text-5xl mb-10">
 	Total Avaliable jobs
 	{#if totalJobs}
 		<b class="text-accent">{totalJobs}</b>
@@ -14,7 +14,7 @@
 		<span class="loading text-accent loading-dots loading-lg"></span>
 	{/if}
 </h1>
-<div class="grid gap-5 px-5 py-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+<div class="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 	{#if !items.length}
 		{#each skeletonItems as item}
 			<div id={`skeleton-${item}`} class="skeleton w-full h-80"></div>

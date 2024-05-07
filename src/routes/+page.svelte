@@ -22,6 +22,9 @@
 			url: item.generalInfo.link,
 			score: item.score,
 			companyName: item.generalInfo.companyName,
+			title: item.generalInfo.title,
+			shortDesc: item.generalInfo.shortDescription,
+			description: item.generalInfo.description,
 			moveBack: () => (jobData = null)
 		};
 	}
