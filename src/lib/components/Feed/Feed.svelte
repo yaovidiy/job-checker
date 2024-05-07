@@ -6,6 +6,10 @@
   const skeletonItems = [1, 2, 3, 4, 5, 6];
 </script>
 
+<svelte:head>
+	<title>Jobs Feed</title>
+</svelte:head>
+
 <h1 class="text-center text-5xl mb-10">
 	Total Avaliable jobs
 	{#if totalJobs}

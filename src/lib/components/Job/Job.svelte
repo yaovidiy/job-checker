@@ -86,6 +86,10 @@
 	onMount(loadJobData);
 </script>
 
+<svelte:head>
+	<title>{title}</title>
+</svelte:head>
+
 <a href="#!" onclick={moveBack} class="btn btn-primary btn-outline mb-10">Move back</a>
 
 <h1 class="text-center mb-10 text-5xl">
