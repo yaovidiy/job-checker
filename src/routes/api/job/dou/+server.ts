@@ -35,25 +35,29 @@ export async function POST({ request }) {
       await page.waitForSelector('text/Відгуків поки що немає', { timeout: 1000 })
 
     } catch (err) {
-      reviewsData = await page.evaluate(() => {
-        const lastComment = document.querySelector('#commentsList .b-comment') as HTMLElement;
-        const authorEl = lastComment.querySelector('.b-post-author a.avatar') as HTMLAnchorElement;
-        const timeEl = lastComment.querySelector('.b-post-author a.comment-link') as HTMLAnchorElement;
-        const commentEl = lastComment.querySelector('.comment .l-text.b-typo') as HTMLElement;
-        const totalCommentsEl = document.querySelector('#lblCommentsCount') as HTMLElement;
-  
-        return {
-          lastComment: {
-            author: {
-              name: authorEl?.innerText ?? 'No name el',
-              link: authorEl?.href ?? 'No link el'
+      try {
+        reviewsData = await page.evaluate(() => {
+          const lastComment = document.querySelector('#commentsList .b-comment') as HTMLElement;
+          const authorEl = lastComment.querySelector('.b-post-author a.avatar') as HTMLAnchorElement;
+          const timeEl = lastComment.querySelector('.b-post-author a.comment-link') as HTMLAnchorElement;
+          const commentEl = lastComment.querySelector('.comment .l-text.b-typo') as HTMLElement;
+          const totalCommentsEl = document.querySelector('#lblCommentsCount') as HTMLElement;
+    
+          return {
+            lastComment: {
+              author: {
+                name: authorEl?.innerText ?? 'No name el',
+                link: authorEl?.href ?? 'No link el'
+              },
+              comment: commentEl?.innerHTML ?? 'No comment el',
+              time: timeEl?.innerText ?? 'No time el'
             },
-            comment: commentEl?.innerHTML ?? 'No comment el',
-            time: timeEl?.innerText ?? 'No time el'
-          },
-          totalComments: +totalCommentsEl?.innerText?.split(' ')[0]
-        }
-      });
+            totalComments: +totalCommentsEl?.innerText?.split(' ')[0]
+          }
+        });
+      } catch (err) {
+        // silent fail
+      }
     }
     
 

@@ -69,6 +69,10 @@
 
 			djinniData = djinniRes;
 
+			if (djinniData?.companyDouLink) {
+				douURL = djinniData.companyDouLink;
+			}
+
 			const douResp = await fetch('/api/job/dou', {
 				method: 'post',
 				body: JSON.stringify({
@@ -174,10 +178,16 @@
 							{applied}
 						</li>
 					</ul>
-					{#if djinniData.vacancyData?.canApply && !isApplied}
+					{#if djinniData.vacancyData?.canApply && !isApplied && !djinniData.vacancyData.lowerSalary}
 						<a href={url} class="btn btn-primary" target="_blank">Apply</a>
-					{:else if djinniData.vacancyData?.canApply && isApplied}
+					{:else if djinniData.vacancyData?.canApply && !isApplied && djinniData.vacancyData.lowerSalary}
+						<a href={url} class="btn btn-neutral" target="_blank">Can Apply to lower salary</a>
+					{:else if djinniData.vacancyData?.canApply && isApplied && !djinniData.vacancyData.lowerSalary}
 						<a href={url} class="btn btn-secondary" target="_blank">You have applied</a>
+					{:else if djinniData.vacancyData?.canApply && isApplied && djinniData.vacancyData.lowerSalary}
+						<a href={url} class="btn btn-neutral" target="_blank"
+							>You have applied to lower salary</a
+						>
 					{:else}
 						<button class="btn btn-error">You can't apply</button>
 					{/if}
@@ -196,10 +206,16 @@
 							{applied}
 						</li>
 					</ul>
-					{#if djinniData.vacancyData.canApply && !isApplied}
+					{#if djinniData.vacancyData?.canApply && !isApplied && !djinniData.vacancyData.lowerSalary}
 						<a href={url} class="btn btn-primary" target="_blank">Apply</a>
-					{:else if djinniData.vacancyData.canApply && isApplied}
+					{:else if djinniData.vacancyData?.canApply && !isApplied && djinniData.vacancyData.lowerSalary}
+						<a href={url} class="btn btn-neutral" target="_blank">Can Apply to lower salary</a>
+					{:else if djinniData.vacancyData?.canApply && isApplied && !djinniData.vacancyData.lowerSalary}
 						<a href={url} class="btn btn-secondary" target="_blank">You have applied</a>
+					{:else if djinniData.vacancyData?.canApply && isApplied && djinniData.vacancyData.lowerSalary}
+						<a href={url} class="btn btn-neutral" target="_blank"
+							>You have applied to lower salary</a
+						>
 					{:else}
 						<button class="btn btn-error">You can't apply</button>
 					{/if}

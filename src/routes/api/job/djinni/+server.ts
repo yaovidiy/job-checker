@@ -38,6 +38,7 @@ export async function POST({ request }) {
     const infoList = asideLists[2];
 
     const isRequrementsNotMetEl = requrementsList.querySelector('.bi-x-circle');
+    const isSalaryLowerEl = requrementsList.querySelector('.bi-coin');
     const mainTagEl = tagsList.querySelector('li:has(.bi-folder) div.col.pl-2') as HTMLElement;
     const tagsEl = tagsList.querySelector('li:has(.bi-tags) div.col.pl-2') as HTMLElement;
     const domainEl = infoList.querySelector('li:has(.bi-info-circle) div.col.pl-2') as HTMLElement;
@@ -47,6 +48,7 @@ export async function POST({ request }) {
 
     return {
       canApply: isRequrementsNotMetEl === null,
+      lowerSalary: isSalaryLowerEl !== null,
       mainTag: mainTagEl?.innerText ?? '',
       tags: tagsEl?.innerText.split(',') ?? [],
       domain: domainEl?.innerText?.split(':')[1].trim() ?? '',
@@ -78,6 +80,7 @@ export async function POST({ request }) {
     });
   }
 
+  let companyDouLink: string | null = null;
   let dialogData: dialogPageData = null;
   try {
     const dialogButtonEl = await page.waitForSelector('text/Відкрити діалог', { timeout: 1000 });
@@ -112,10 +115,34 @@ export async function POST({ request }) {
     });
 
     dialogData = dialogPageData;
+    try {
+      const companyDouWebSiteEl = await page.waitForSelector('text/jobs.dou.ua', { timeout: 1000 });
+      const companyDouUrl = await page.evaluate(el => {
+        return (el as HTMLAnchorElement | null)?.innerText ?? null
+      }, companyDouWebSiteEl)
 
-    return json({ vacancyData, expLevel, salaryLevel, dialogData });
+      companyDouLink = companyDouUrl;
+    } catch (err) {
+      // silent fail
+    }
+
+    return json({ vacancyData, expLevel, salaryLevel, dialogData, companyDouLink });
   } catch (err) {
-    return json({ vacancyData, expLevel, salaryLevel, dialogData });
+    try {
+      const companyDjinniWebSiteEl = await page.waitForSelector('.job-details--title', { timeout: 1000 });
+      await companyDjinniWebSiteEl?.click();
+      await page.waitForNetworkIdle();
+
+      const companyDouWebSiteEl = await page.waitForSelector('text/jobs.dou.ua', { timeout: 1000 })
+      const companyDouUrl = await page.evaluate(el => {
+        return (el as HTMLAnchorElement | null)?.innerText ?? null
+      }, companyDouWebSiteEl)
+
+      companyDouLink = companyDouUrl;
+    } catch (err) {
+      // silent fail
+    }
+    return json({ vacancyData, expLevel, salaryLevel, dialogData, companyDouLink });
   } finally {
     await browser.close();
   }

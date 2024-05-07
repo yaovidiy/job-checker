@@ -63,6 +63,7 @@ export type djinniResponse = {
   expLevel: string;
   salaryLevel: string;
   dialogData: dialogPageData;
+  companyDouLink: string | null;
 } | null;
 
 export type douResponse = {
@@ -72,6 +73,7 @@ export type douResponse = {
 
 export type vacancyData = {
   canApply: boolean;
+  lowerSalary: boolean;
   mainTag: string;
   tags: string[];
   domain: string;
