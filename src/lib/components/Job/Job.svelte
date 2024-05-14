@@ -238,7 +238,7 @@
 			<span class="text-error">No Djinni data is loaded!</span>
 		{/if}
 	</div>
-	<div class="">
+	<div class="sticky h-fit top-5">
 		{#if douData}
 			{#if douData.vacanciesdData?.companyScore && douData.vacanciesdData.companyScore !== 'No score El'}
 				<div class="flex flex-col items-center mb-5">

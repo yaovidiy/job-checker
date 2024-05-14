@@ -26,8 +26,8 @@
 				<h2 class="card-title">{generalInfo.title}</h2>
 				<p>
 					{@html text}
-					<a href="#!" onclick={toggleText} class="link link-secondary"
-						>{showFullText ? 'Show less' : 'Show more'}</a
+					<button onclick={toggleText} class="link link-secondary"
+						>{showFullText ? 'Show less' : 'Show more'}</button
 					>
 				</p>
 			</div>
@@ -58,7 +58,10 @@
 						</h3>
 					</li>
 					<li class="h-6">
-						<h3 class="truncate text-left w-full text-base tooltip" data-tip={generalInfo.companyName}>
+						<h3
+							class="truncate text-left w-full text-base tooltip"
+							data-tip={generalInfo.companyName}
+						>
 							Company:
 							<a
 								href={`https://jobs.dou.ua/companies/${generalInfo.companyName.toLowerCase()}/reviews/`}
@@ -72,6 +75,12 @@
 						<h3 class="truncate w-full text-base">
 							Exp: {additionalInfo.experience}
 						</h3>
+					</li>
+					<li>
+						<h3>Viewed: {analitics.reviews}</h3>
+					</li>
+					<li>
+						<h3>Applied: {analitics.applies}</h3>
 					</li>
 				</ul>
 			</div>

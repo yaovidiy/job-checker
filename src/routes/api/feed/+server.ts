@@ -79,15 +79,17 @@ export async function GET({ url }) {
       const englishEl = infoEl.querySelector('span.nobr:last-child') as HTMLElement;
       const companyEl = header.querySelector('div.align-items-center > div > a.mr-2') as HTMLElement;
       const titleLink = el.querySelector('.job-list-item__title a.job-list-item__link') as HTMLAnchorElement;
-      const descriptionElement = el.querySelector('.job-list-item__description span') as HTMLElement;
+      const descriptionElement = el.querySelector('.job-list-item__description') as HTMLElement;
+      const shortDescEl = descriptionElement.querySelector('.js-truncated-text') as HTMLElement;
+      const descEl = descriptionElement.querySelector('.js-original-text') as HTMLElement;
       const pubSalaryEl = el.querySelector('.public-salary-item') as HTMLElement;
 
       const generalInfo = {
         title: titleLink?.innerText,
         link: titleLink?.href,
         companyName: companyEl?.innerText,
-        shortDescription: descriptionElement?.dataset?.truncatedText ?? '',
-        description: descriptionElement?.dataset?.originalText ?? '',
+        shortDescription: shortDescEl.innerText ?? 'No short description found',
+        description: descEl?.innerHTML ?? 'No full description found',
         postDate: postDateEl?.dataset?.originalTitle ?? '',
         pubSalary: {
           min: pubSalaryEl?.innerText?.split('-')[0] ?? 0,
