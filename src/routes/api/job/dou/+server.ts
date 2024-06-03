@@ -42,7 +42,7 @@ export async function POST({ request }) {
           const timeEl = lastComment.querySelector('.b-post-author a.comment-link') as HTMLAnchorElement;
           const commentEl = lastComment.querySelector('.comment .l-text.b-typo') as HTMLElement;
           const totalCommentsEl = document.querySelector('#lblCommentsCount') as HTMLElement;
-    
+
           return {
             lastComment: {
               author: {
@@ -59,17 +59,8 @@ export async function POST({ request }) {
         // silent fail
       }
     }
-    
-
-    await page.screenshot({
-      path: './static/dou/reviews.png'
-    });
 
     await page.goto(`${body.url}/vacancies/`);
-
-    await page.screenshot({
-      path: './static/dou/vacancies.png'
-    });
 
     try {
       await page.waitForSelector('text/Немає вакансій', { timeout: 1000 });
