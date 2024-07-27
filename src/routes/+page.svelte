@@ -31,8 +31,10 @@
 	async function loadFeedPage(page: string | null = null): Promise<jobItem[] | null> {
 		let items = [];
 		let respItems = await fetch(`/api/feed?page=${page ?? 1}`);
-		
+
 		if (!respItems.ok) {
+			respItems = await fetch(`/api/simple/feed?page=${page ?? 1}`);
+
 			return null;
 		}
 
@@ -55,7 +57,14 @@
 </script>
 
 {#if !jobData}
-	<Feed {totalJobs} {pages} {currentPage} {updateCurrentPage} {loadFeedPage} clickOnItem={showJob} />
+	<Feed
+		{totalJobs}
+		{pages}
+		{currentPage}
+		{updateCurrentPage}
+		{loadFeedPage}
+		clickOnItem={showJob}
+	/>
 {:else}
 	<Job {...jobData} />
 {/if}
