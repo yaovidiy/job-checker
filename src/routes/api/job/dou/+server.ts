@@ -29,7 +29,7 @@ export async function POST({ request }) {
     await page.goto(body.url, {
       waitUntil: "networkidle",
     });
-    await page.screenshot({ path: './dou/playwrite/mainPage.png' });
+    await page.screenshot({ path: './static/dou/playwrite/mainPage.png' });
     await page.waitForSelector('text/404', { timeout: 1000 });
 
     return json(null);
