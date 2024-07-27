@@ -108,7 +108,6 @@ function calculateScore(job: jobItem) {
   const isExperience = parseInt(expNumber ? expNumber[0] : '0') >= 3;
   const isAngular = job.generalInfo.title.toLowerCase().includes('angular');
   const isSalary = job.generalInfo?.pubSalary?.max ? parseInt(job.generalInfo.pubSalary.max) >= 3500 : false;
-  const isSalaryLess = job.generalInfo?.pubSalary?.max ? parseInt(job.generalInfo.pubSalary.max) <= 3000 : false;
 
   score += isRemote ? 15 : 0;
   score += isReact ? 9 : 0;
@@ -124,6 +123,5 @@ function calculateScore(job: jobItem) {
   score = isAngular ? 0 : score;
   score = isOffice ? 0 : score;
   score = isReactNative ? 0 : score;
-  score = isSalaryLess ? 0 : score;
   return score;
 }
