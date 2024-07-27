@@ -65,7 +65,7 @@ export async function GET({ url }) {
     const analitics = {
       reviews: reviewsReg ? reviewsReg[0] : '',
       applies: appliesReg ? appliesReg[0] : '',
-      isApplied: appliedEl !== null,
+      isApplied: appliedEl.length > 0,
     }
 
     const additionalInfo = {
