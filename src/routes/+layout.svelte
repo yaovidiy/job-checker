@@ -9,3 +9,6 @@
 <main class="px-5 py-10">
   <slot />
 </main>
+<footer>
+  <p class="text-center text-gray-500 text-sm">© {new Date().getFullYear()} job parser, for personal use only.</p>
+</footer>
