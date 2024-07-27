@@ -76,10 +76,10 @@ export async function POST({ request }) {
       return (el as HTMLElement).innerText;
     }, salaryLevelEl)
   } catch (err) {
-    await page.screenshot({
-      path: './static/djinni/error.png',
-      fullPage: true,
-    });
+    // await page.screenshot({
+    //   path: './static/djinni/error.png',
+    //   fullPage: true,
+    // });
   }
 
   let companyDouLink: string | null = null;
