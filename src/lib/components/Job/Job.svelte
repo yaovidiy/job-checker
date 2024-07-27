@@ -304,7 +304,7 @@
 				<p class="text-error mb-5 text-right">No reviews on DOU for this company!</p>
 			{/if}
 
-			{#if douData.vacanciesdData}
+			{#if douData.vacanciesdData && douData.vacanciesdData.vacancies.vacanciesDataList.length}
 				<ul class="text-xl text-right">
 					<li>
 						<strong>Total vacancies:</strong>

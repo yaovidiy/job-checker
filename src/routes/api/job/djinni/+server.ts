@@ -1,28 +1,30 @@
-import puppeteer, { type CookieParam } from 'puppeteer';
+import { chromium } from 'playwright';
 import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
 import { type vacancyData, type dialogPageData } from '$lib/types/index.js';
 
 export async function POST({ request }) {
   const body = await request.json();
-  const cookie_sessionid: CookieParam = {
+  const cookie_sessionid = {
     name: 'sessionid',
     value: env.SESSION_COOKIES_VALUE ?? '',
     domain: '.djinni.co',
     path: '/',
-    expires: new Date('2025-05-03T17:38:44.000Z').getTime(),
-    priority: 'Medium',
+    expires: Math.round(new Date('2025-07-08T11:40:45.085Z').getTime() / 1000),
     httpOnly: true,
     secure: true,
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await chromium.launch();
+  const context = await browser.newContext();
+
+  await context.addCookies([cookie_sessionid]);
+  const cookies = await context.cookies();
+  console.log(cookies);
   const page = await browser.newPage();
 
-  await page.setCookie(cookie_sessionid);
-
   await page.goto(body.url, {
-    waitUntil: 'networkidle2',
+    waitUntil: 'networkidle',
   });
 
   const vacancyData: vacancyData = await page.evaluate(() => {
@@ -89,7 +91,7 @@ export async function POST({ request }) {
     }, dialogButtonEl);
 
     await page.goto(dialogLink, {
-      waitUntil: 'networkidle2',
+      waitUntil: 'networkidle',
     });
 
     const dialogPageData: dialogPageData = await page.evaluate(() => {
@@ -131,7 +133,7 @@ export async function POST({ request }) {
     try {
       const companyDjinniWebSiteEl = await page.waitForSelector('.job-details--title', { timeout: 1000 });
       await companyDjinniWebSiteEl?.click();
-      await page.waitForNetworkIdle();
+      await page.waitForEvent('domcontentloaded');
 
       const companyDouWebSiteEl = await page.waitForSelector('text/jobs.dou.ua', { timeout: 1000 })
       const companyDouUrl = await page.evaluate(el => {
