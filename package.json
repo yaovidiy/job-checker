@@ -43,6 +43,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/adapter-node": "^5.0.1",
+		"got-scraping": "^4.0.6",
 		"puppeteer": "^22.7.1"
 	}
 }

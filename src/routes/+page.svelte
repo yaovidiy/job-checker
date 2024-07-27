@@ -4,7 +4,6 @@
 	import Job from '$lib/components/Job/Job.svelte';
 
 	const { data } = $props();
-	let items = $state<jobItem[]>([]);
 	let totalJobs = $state(0);
 	let currentPage = $state(data.page);
 	let pages = $state<number[]>([]);
@@ -29,14 +28,19 @@
 		};
 	}
 
-	async function loadFeedPage(page: string | null = null) {
-		items = [];
-		const respItems = await fetch(`/api/feed?page=${page ?? 1}`);
+	async function loadFeedPage(page: string | null = null): Promise<jobItem[] | null> {
+		let items = [];
+		let respItems = await fetch(`/api/feed?page=${page ?? 1}`);
+		
+		if (!respItems.ok) {
+			return null;
+		}
+
 		const resItems = await respItems.json();
 		items = resItems.jobsDataArray;
 
-		if (pages.length) {
-			return;
+		if (!items.length) {
+			return null;
 		}
 
 		totalJobs = parseInt(resItems.totalAmount);
@@ -45,15 +49,13 @@
 			tempPages.push(i);
 		}
 		pages = tempPages;
-	}
 
-	$effect(() => {
-		loadFeedPage(currentPage);
-	});
+		return items;
+	}
 </script>
 
 {#if !jobData}
-	<Feed {totalJobs} {items} {pages} {currentPage} {updateCurrentPage} clickOnItem={showJob} />
+	<Feed {totalJobs} {pages} {currentPage} {updateCurrentPage} {loadFeedPage} clickOnItem={showJob} />
 {:else}
 	<Job {...jobData} />
 {/if}

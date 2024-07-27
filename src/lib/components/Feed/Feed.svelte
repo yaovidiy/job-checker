@@ -1,31 +1,41 @@
 <script lang="ts">
-	import { type FeedProps } from '$lib/types';
+	import { type FeedProps, type jobItem } from '$lib/types';
 	import Card from './Card.svelte';
 
-	const { totalJobs, items, pages, currentPage, updateCurrentPage, clickOnItem }: FeedProps =
-		$props();
+	const {
+		totalJobs,
+		pages,
+		currentPage,
+		updateCurrentPage,
+		clickOnItem,
+		loadFeedPage
+	}: FeedProps = $props();
 	const skeletonItems = [1, 2, 3, 4, 5, 6];
+
+	let loadPromise: Promise<jobItem[] | null> = $state(loadFeedPage(currentPage ?? '1'));
 </script>
 
 <svelte:head>
 	<title>Jobs Feed</title>
 </svelte:head>
 
-{#if items?.length}
+{#await loadPromise}
 	<h1 class="text-center text-5xl mb-10">
 		Total Avaliable jobs
-		{#if totalJobs}
-			<b class="text-accent">{totalJobs}</b>
-		{:else}
-			<span class="loading text-accent loading-dots loading-lg"></span>
-		{/if}
+		<span class="loading text-accent loading-dots loading-lg"></span>
 	</h1>
 	<div class="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-		{#if !items.length}
-			{#each skeletonItems as item}
-				<div id={`skeleton-${item}`} class="skeleton w-full h-80"></div>
-			{/each}
-		{:else}
+		{#each skeletonItems as item}
+			<div id={`skeleton-${item}`} class="skeleton w-full h-80"></div>
+		{/each}
+	</div>
+{:then items}
+	{#if items !== null}
+		<h1 class="text-center text-5xl mb-10">
+			Total Avaliable jobs
+			<b class="text-accent">{totalJobs}</b>
+		</h1>
+		<div class="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 			{#each items as item}
 				<Card {item} {clickOnItem} />
 			{/each}
@@ -34,7 +44,10 @@
 					{#each pages as page}
 						<a
 							href={`/?page=${page}`}
-							onclick={() => updateCurrentPage(page.toString())}
+							onclick={(e) => {
+								updateCurrentPage(page.toString());
+								loadPromise = loadFeedPage(page.toString());
+							}}
 							class="join-item btn"
 							class:btn-primary={currentPage ? parseInt(currentPage) === page : page === 1}
 							>{page}</a
@@ -42,8 +55,12 @@
 					{/each}
 				</div>
 			</div>
-		{/if}
-	</div>
-{:else}
-	<h1>Something hapened and we can't show you the results. Please try again later.</h1>
-{/if}
+		</div>
+	{:else}
+		<h1 class="text-center text-5xl mb-10">No jobs found</h1>
+	{/if}
+{:catch _}
+	<h1 class="text-center text-5xl mb-10">
+		Something hapened and we can't show you the results. Please try again later.
+	</h1>
+{/await}

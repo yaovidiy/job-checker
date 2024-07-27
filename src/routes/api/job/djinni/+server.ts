@@ -19,8 +19,6 @@ export async function POST({ request }) {
   const context = await browser.newContext();
 
   await context.addCookies([cookie_sessionid]);
-  const cookies = await context.cookies();
-  console.log(cookies);
   const page = await browser.newPage();
 
   await page.goto(body.url, {

@@ -89,12 +89,12 @@ export type dialogPageData = {
 } | null
 
 export interface FeedProps {
-  items: jobItem[];
   totalJobs: number;
   pages: number[];
   currentPage: string | null;
   updateCurrentPage: (page: string) => void;
   clickOnItem: (item: jobItem) => void;
+  loadFeedPage: (page: string) => Promise<jobItem[] | null>;
 }
 
 export interface CardProps {

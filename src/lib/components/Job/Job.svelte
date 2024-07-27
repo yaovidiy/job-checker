@@ -233,7 +233,10 @@
 				</div>
 			</div>
 		{:else if loading && !djinniData}
+		<div class="flex items-center gap-3">
 			<span class="loading loading-spinner loading-lg"></span>
+			<span class="text-2xl">Loading Djinni data</span>
+		</div>
 		{:else}
 			<span class="text-error">No Djinni data is loaded!</span>
 		{/if}
@@ -354,7 +357,10 @@
 				<p class="text-error text-right">No vacancies on DOU for this company</p>
 			{/if}
 		{:else if loading && !douData}
-			<span class="loading loading-spinner loading-lg"></span>
+				<div class="flex items-center gap-3">
+					<span class="loading loading-spinner loading-lg"></span>
+					<span class="text-2xl">Loading Dou Data</span>
+				</div>
 		{:else}
 			<p class="text-error text-right mb-5">
 				No DOU data is loaded. <a href={douURL} target="_blank" class="link">See the link</a>
