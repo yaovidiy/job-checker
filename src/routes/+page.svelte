@@ -30,29 +30,33 @@
 
 	async function loadFeedPage(page: string | null = null): Promise<jobItem[] | null> {
 		let items = [];
-		let respItems = await fetch(`/api/feed?page=${page ?? 1}`);
 
-		if (!respItems.ok) {
-			respItems = await fetch(`/api/simple/feed?page=${page ?? 1}`);
+		try {
+			let respItems = await fetch(`/api/feed?page=${page ?? 1}`);
 
+			if (!respItems.ok) {
+				respItems = await fetch(`/api/simple/feed?page=${page ?? 1}`);
+			}
+
+			const resItems = await respItems.json();
+			items = resItems.jobsDataArray;
+
+			if (!items.length) {
+				return null;
+			}
+
+			totalJobs = parseInt(resItems.totalAmount);
+			const tempPages: number[] = [];
+			for (let i = 1; i <= Math.ceil(resItems.totalAmount / 15); i++) {
+				tempPages.push(i);
+			}
+			pages = tempPages;
+
+			return items;
+		} catch (err) {
+			console.error(err);
 			return null;
 		}
-
-		const resItems = await respItems.json();
-		items = resItems.jobsDataArray;
-
-		if (!items.length) {
-			return null;
-		}
-
-		totalJobs = parseInt(resItems.totalAmount);
-		const tempPages: number[] = [];
-		for (let i = 1; i <= Math.ceil(resItems.totalAmount / 15); i++) {
-			tempPages.push(i);
-		}
-		pages = tempPages;
-
-		return items;
 	}
 </script>
 
