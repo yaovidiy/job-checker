@@ -1,18 +1,17 @@
 <script lang="ts">
 	import { type FeedProps, type jobItem } from '$lib/types';
+	import { onMount } from 'svelte';
 	import Card from './Card.svelte';
 
-	const {
-		totalJobs,
-		pages,
-		currentPage,
-		updateCurrentPage,
-		clickOnItem,
-		loadFeedPage
-	}: FeedProps = $props();
+	const { totalJobs, pages, currentPage, updateCurrentPage, clickOnItem, loadFeedPage }: FeedProps =
+		$props();
 	const skeletonItems = [1, 2, 3, 4, 5, 6];
 
-	let loadPromise: Promise<jobItem[] | null> = $state(loadFeedPage(currentPage ?? '1'));
+	let loadPromise: Promise<jobItem[] | null> = $state(Promise.resolve(null));
+
+	onMount(() => {
+		loadPromise = loadFeedPage(currentPage?.toString() ?? '1');
+	});
 </script>
 
 <svelte:head>

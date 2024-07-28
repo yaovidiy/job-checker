@@ -1,4 +1,4 @@
-import { chromium } from 'playwright';
+import puppeteer from 'puppeteer';
 import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
 import { type vacancyData, type dialogPageData } from '$lib/types/index.js';
@@ -15,14 +15,17 @@ export async function POST({ request }) {
     secure: true,
   }
 
-  const browser = await chromium.launch();
-  const context = await browser.newContext();
+  const browser = await puppeteer.launch({
+    executablePath: '/usr/bin/google-chrome',
+    args: ['--no-sandbox'],
+  });
 
-  await context.addCookies([cookie_sessionid]);
   const page = await browser.newPage();
 
+  await page.setCookie(cookie_sessionid);
+
   await page.goto(body.url, {
-    waitUntil: 'networkidle',
+    waitUntil: 'networkidle2',
   });
 
   const vacancyData: vacancyData = await page.evaluate(() => {
@@ -89,7 +92,7 @@ export async function POST({ request }) {
     }, dialogButtonEl);
 
     await page.goto(dialogLink, {
-      waitUntil: 'networkidle',
+      waitUntil: 'networkidle2',
     });
 
     const dialogPageData: dialogPageData = await page.evaluate(() => {
@@ -131,7 +134,7 @@ export async function POST({ request }) {
     try {
       const companyDjinniWebSiteEl = await page.waitForSelector('.job-details--title', { timeout: 1000 });
       await companyDjinniWebSiteEl?.click();
-      await page.waitForEvent('domcontentloaded');
+      await page.waitForNetworkIdle();
 
       const companyDouWebSiteEl = await page.waitForSelector('text/jobs.dou.ua', { timeout: 1000 })
       const companyDouUrl = await page.evaluate(el => {

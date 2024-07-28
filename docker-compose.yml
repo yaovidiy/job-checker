@@ -10,7 +10,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    user: "node"
     environment:
       # Internal server error messages will not send stacktrace to the browser in production
       - NODE_ENV=production
@@ -18,5 +17,7 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    volumes:
+      - ./src:/app/src
     ports:
-      - 3000:3000
+      - 5173:5173

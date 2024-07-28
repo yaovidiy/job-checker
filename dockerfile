@@ -1,30 +1,26 @@
-#Dockerfile
+FROM node:18-slim
 
-# Use official puppeteer image 
-FROM node:22-alpine
+# Install dependencies for standalone Chrome browser
+RUN apt-get update && apt-get install -y wget gnupg2 ca-certificates
 
-RUN 
+# Download and install standalone Chrome browser
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update && apt-get install -y google-chrome-stable
 
-# A small line inside the image to show who made it
-LABEL Developers="Yaroslav Ovdii"
-
-# The WORKDIR instruction sets the working directory for everything that will happen next
+# Set the working directory
 WORKDIR /app
 
-# Copy all local files into the image
+# Copy package.json and package-lock.json to the working directory
+COPY package.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Clean install all node modules
-RUN npm install --legacy-peer-deps
-
-# Build SvelteKit app
 RUN npm run build
 
-# Delete source code files that were used to build the app that are no longer needed
-RUN rm -rf src/ static/ emailTemplates/ docker-compose.yml
-
-# The USER instruction sets the user name to use as the default user for the remainder of the current stage
-USER node:node
-
-# This is the command that will be run inside the image when you tell Docker to start the container
-CMD ["node","build/index.js"]
+# Run the npm run dev command
+CMD ["npm", "run", "dev"]

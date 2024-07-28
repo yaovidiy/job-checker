@@ -1,12 +1,12 @@
 import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
-import { chromium, type Cookie } from 'playwright';
+import puppeteer, { type CookieParam } from 'puppeteer';
 import { type vacanciesdData, type vacanciesDataItem, type reviewsData } from '$lib/types/index.js';
 
 export async function POST({ request }) {
   const body = await request.json();
 
-  const cookie_sessionid: Cookie = {
+  const cookie_sessionid: CookieParam = {
     name: 'sessionid',
     value: env.DOU_SESSION_COOKIES ?? '',
     domain: '.dou.ua',
@@ -17,17 +17,18 @@ export async function POST({ request }) {
     sameSite: 'Lax'
   }
 
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext();
+  const browser = await puppeteer.launch({
+    executablePath: '/usr/bin/google-chrome',
+    args: ['--no-sandbox'],
+  });
 
-  await context.addCookies([cookie_sessionid]);
+  const page = await browser.newPage();
 
-  const page = await context.newPage();
+  await page.setCookie(cookie_sessionid);
 
   try {
-    await page.setViewportSize({ width: 1440, height: 1024 });
     await page.goto(body.url, {
-      waitUntil: "networkidle",
+      waitUntil: "networkidle2",
     });
     // await page.screenshot({ path: './static/dou/playwrite/mainPage.png' });
     await page.waitForSelector('text/404', { timeout: 1000 });
@@ -36,7 +37,7 @@ export async function POST({ request }) {
   } catch (err) {
     let reviewsData: reviewsData | null = null;
     try {
-      await page.goto(`${body.url}/reviews`, { waitUntil: 'networkidle' })
+      await page.goto(`${body.url}/reviews`, { waitUntil: 'networkidle2' })
       await page.waitForSelector('text/Відгуків поки що немає', { timeout: 1000 })
 
     } catch (err) {

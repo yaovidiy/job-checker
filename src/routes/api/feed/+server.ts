@@ -16,7 +16,10 @@ export async function GET({ url }) {
     secure: true,
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    executablePath: '/usr/bin/google-chrome',
+    args: ['--no-sandbox'],
+  });
   const page = await browser.newPage();
 
   await page.setCookie(cookie_sessionid);
